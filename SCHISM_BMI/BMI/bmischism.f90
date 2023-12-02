@@ -198,6 +198,10 @@ subroutine read_init_config(this, config_file, bmi_status)
     this%model%iths = 0
     this%model%ntime = 0
     this%model%SCHISM_dir = SCHISM_dir
+
+    ! This global variable is a thorn in our side - PBM
+    dt = time_step_size
+
     bmi_status = BMI_SUCCESS
   end if
   close (fu)
@@ -1751,7 +1755,7 @@ end function schism_finalizer
     double precision, intent(out) :: time
     integer :: bmi_status
 
-    time = 0.0
+    time = this%model%model_start_time
     bmi_status = BMI_SUCCESS
   end function schism_start_time
   
@@ -1761,7 +1765,7 @@ end function schism_finalizer
     double precision, intent(out) :: time
     integer :: bmi_status
 
-    time = ceiling(dble(rnday)*86400.d0/dt+0.5d0) * dt
+    time = this%model%model_end_time
     bmi_status = BMI_SUCCESS
   end function schism_end_time
 
@@ -1781,7 +1785,7 @@ end function schism_finalizer
     double precision, intent(out) :: time_step
     integer :: bmi_status
 
-    time_step = dt
+    time_step = this%model%time_step_size
     bmi_status = BMI_SUCCESS
   end function schism_time_step
 
