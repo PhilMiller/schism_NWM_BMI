@@ -172,6 +172,7 @@ subroutine read_init_config(this, config_file, bmi_status)
       bmi_status = BMI_FAILURE
       return
   end if
+
   ! Open and read Namelist file.
   open (action='read', file=trim(config_file), iostat=rc, newunit=fu)
   read (nml=test, iostat=rc, unit=fu)
@@ -182,28 +183,31 @@ subroutine read_init_config(this, config_file, bmi_status)
        'Invalid line in namelist: '//trim(line)
       write (stderr, '(a)') 'Error: invalid Namelist format.'
       bmi_status = BMI_FAILURE
-  else
-    if (model_start_time == -1 ) then
+      return
+  end if
+
+  if (model_start_time == -1 ) then
       !model_start_time wasn't found in the name list, log the error and return
       write (stderr, *) "Config param 'model_start_time' not found in config file"
       bmi_status = BMI_FAILURE
       return
-    end if
-    !Update the model with all values found in the namelist
-    this%model%model_start_time = model_start_time
-    this%model%model_end_time = model_end_time
-    this%model%current_model_time = 0.0
-    this%model%num_time_steps = num_time_steps
-    this%model%time_step_size = time_step_size
-    this%model%iths = 0
-    this%model%ntime = 0
-    this%model%SCHISM_dir = SCHISM_dir
-
-    ! This global variable is a thorn in our side - PBM
-    dt = time_step_size
-
-    bmi_status = BMI_SUCCESS
   end if
+ 
+  !Update the model with all values found in the namelist
+  this%model%model_start_time = model_start_time
+  this%model%model_end_time = model_end_time
+  this%model%current_model_time = 0.0
+  this%model%num_time_steps = num_time_steps
+  this%model%time_step_size = time_step_size
+  this%model%iths = 0
+  this%model%ntime = 0
+  this%model%SCHISM_dir = SCHISM_dir
+
+  ! This global variable is a thorn in our side - PBM
+  dt = time_step_size
+
+  bmi_status = BMI_SUCCESS
+
   close (fu)
 end subroutine read_init_config
 
@@ -389,29 +393,29 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(name)
-    case("SFCPRS")
-       units = "Pa"
-       bmi_status = BMI_SUCCESS
-    case("TMP2m")
-       units = "K"
-       bmi_status = BMI_SUCCESS
     case("BEDLEVEL")
        units = "m"
        bmi_status = BMI_SUCCESS       
-    case("RAINRATE")
-       units = "kg m-2 s-1"
-       bmi_status = BMI_SUCCESS
-    case("UU10m", "VV10m",'VX','VY')
-       units = "m s-1"
-       bmi_status = BMI_SUCCESS
-    case("SPFH2m")
-       units = "kg kg-1"
-       bmi_status = BMI_SUCCESS
     case("ETA2",'ETA2_bnd')
        units = "m"
        bmi_status = BMI_SUCCESS
     case('Q_bnd')
        units = "m3 s-1"
+       bmi_status = BMI_SUCCESS
+    case("RAINRATE")
+       units = "kg m-2 s-1"
+       bmi_status = BMI_SUCCESS
+    case("SFCPRS")
+       units = "Pa"
+       bmi_status = BMI_SUCCESS
+    case("SPFH2m")
+       units = "kg kg-1"
+       bmi_status = BMI_SUCCESS
+    case("TMP2m")
+       units = "K"
+       bmi_status = BMI_SUCCESS
+    case("UU10m", "VV10m",'VX','VY')
+       units = "m s-1"
        bmi_status = BMI_SUCCESS
     case default
        units = "-"
