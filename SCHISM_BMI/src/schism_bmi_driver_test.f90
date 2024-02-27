@@ -67,7 +67,9 @@ program schism_driver_test
     integer, allocatable                              :: grid_face_nodes(:) ! Get the face-node connectivity
     integer, allocatable                              :: grid_nodes_per_face(:) ! Get the number of nodes per face
     integer                                           :: counts           ! Edge-node connectivity size to calculate   
-    integer                                           :: a, b             ! Loop counters 
+    integer                                           :: a, b             ! Loop counters
+    integer :: mpi_comm(1)
+    integer :: mpi_err
     real, pointer                                 :: var_value_get_ptr(:) ! value of a variable for get_value_ptr
 
     double precision, allocatable            :: Q_bnd(:), ETA2_bnd(:) ! Boundary condition terms
@@ -82,8 +84,15 @@ program schism_driver_test
   !---------------------------------------------------------------------
     print*, "Initializing..."
     call get_command_argument(1, arg)
+    mpi_comm(1) = MPI_COMM_WORLD
+    status = m%set_value('bmi_mpi_comm_handle', mpi_comm)
     status = m%initialize(arg)
-    print*, "Component name = "
+
+  ! Test that all processes get here, when only a subset of processes call initialize()
+    call MPI_BARRIER(MPI_COMM_WORLD, mpi_err)
+    if (mpi_err /= MPI_SUCCESS) then
+       print*, "MPI_BARRIER call after initialize() failed"
+    end if
 
   !---------------------------------------------------------------------
   ! Get model information
