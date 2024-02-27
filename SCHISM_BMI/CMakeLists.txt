@@ -66,13 +66,13 @@ add_compile_definitions(MPIVERSION=${MPIVERSION})
 
 add_definitions(${MPI_Fortran_COMPILE_FLAGS})
 if (CMAKE_Fortran_FLAGS)
-  set(CMAKE_Fortran_FLAGS ${CMAKE_Fortran_FLAGS} ${MPI_Fortran_COMPILE_FLAGS})
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${MPI_Fortran_COMPILE_FLAGS}")
 endif (CMAKE_Fortran_FLAGS)
 include_directories(${MPI_Fortran_INCLUDE_PATH})
 
 add_definitions(${MPI_C_COMPILE_FLAGS})
 if (CMAKE_C_FLAGS)
-  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} ${MPI_C_COMPILE_FLAGS})
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MPI_C_COMPILE_FLAGS}")
 endif (CMAKE_C_FLAGS)
 include_directories(${MPI_C_INCLUDE_PATH})
 ########### NetCDF Dependency is handled here because so many libraries use it ##############
