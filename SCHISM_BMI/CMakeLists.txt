@@ -31,8 +31,7 @@ endif()
 
 # Set CMAKE CXX Flags to compiled ParMETIS and METIS properly
 #set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS_INIT} -std=c++11 -fPIC")
-set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+add_compile_options("-fPIC")
 
 # https://www.intel.com/content/www/us/en/develop/documentation/oneapi-dpcpp-cpp-compiler-dev-guide-and-reference/top/compiler-setup/use-the-command-line/use-cmake-with-the-compiler.html
 if (INTEL_DPCPP)
