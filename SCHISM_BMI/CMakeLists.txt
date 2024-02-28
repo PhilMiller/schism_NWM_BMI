@@ -244,6 +244,6 @@ add_executable(schism_driver src/schism_bmi_driver_test.f90)
 
 #add_dependencies(schism_driver ${NetCDFLIBS} parmetis)
 
-target_link_libraries(schism_driver PUBLIC ${NetCDFLIBS} parmetis testbmifortranmodel)
+target_link_libraries(schism_driver PUBLIC ${NetCDFLIBS} parmetis testbmifortranmodel ${MPI_Fortran_LIBRARIES})
 
 install(TARGETS schism_driver DESTINATION ${CMAKE_BINARY_DIR})
