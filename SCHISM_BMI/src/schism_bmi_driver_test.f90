@@ -593,7 +593,9 @@ program schism_driver_test
       print*, "Finalizing..."
       status = m%finalize()
       print*, "Model is finalized!"
- 
+
+      call MPI_Finalize(mpi_err)
+
   !---------------------------------------------------------------------
   ! End test
   !---------------------------------------------------------------------
