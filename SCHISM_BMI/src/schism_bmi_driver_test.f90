@@ -83,6 +83,7 @@ program schism_driver_test
   !  Initialize
   !---------------------------------------------------------------------
     print*, "Initializing..."
+    call MPI_Init(mpi_err)
     call get_command_argument(1, arg)
     mpi_comm(1) = MPI_COMM_WORLD
     status = m%set_value('bmi_mpi_comm_handle', mpi_comm)
