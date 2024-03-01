@@ -970,49 +970,19 @@ end function schism_finalizer
     character (len=*), intent(in) :: name
     integer, intent(out) :: size
     integer :: bmi_status
+    double precision :: dummy
+
     !TODO think of a better way to do this
     !Use 'sizeof' in gcc & ifort
     select case(name)
-    case("ETA2")
-       size = sizeof(eta2)
+    case('ETA2','ETA2_bnd', 'Q_bnd', 'RAINRATE','SFCPRS','SPFH2m','TMP2m','UU10m','VV10m','VX','VY','BEDLEVEL')
+       size = sizeof(dummy)
        bmi_status = BMI_SUCCESS
-    case("ETA2_bnd")
-       size = sizeof(ath2(1,1,:,1,1))
-       bmi_status = BMI_SUCCESS
-    case("Q_bnd")
-       size = sizeof(ieg_source)
-       bmi_status = BMI_SUCCESS
-    case("SFCPRS")
-       size = sizeof(pr2)
-       bmi_status = BMI_SUCCESS
-    case("TMP2m")
-       size = sizeof(airt2)
-       bmi_status = BMI_SUCCESS
-    case("RAINRATE")
-       size = sizeof(ieg_source)
-       bmi_status = BMI_SUCCESS
-    case("UU10m")
-       size = sizeof(windx2)
-       bmi_status = BMI_SUCCESS
-    case("VV10m")
-       size = sizeof(windy2)
-       bmi_status = BMI_SUCCESS
-    case("SPFH2m")
-       size = sizeof(shum2)
-       bmi_status = BMI_SUCCESS
-    case("VX")
-       size = sizeof(uu2(1,:))
-       bmi_status = BMI_SUCCESS
-    case("VY")
-       size = sizeof(vv2(1,:))
-       bmi_status = BMI_SUCCESS
-    case("BEDLEVEL")
-       size = sizeof(dp)
-       bmi_status = BMI_SUCCESS       
     case default
        size = -1
        bmi_status = BMI_FAILURE
     end select
+
   end function schism_var_itemsize
 
   ! The size of the given variable.
