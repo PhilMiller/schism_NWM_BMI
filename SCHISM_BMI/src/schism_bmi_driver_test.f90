@@ -69,7 +69,7 @@ program schism_driver_test
     integer                                           :: counts           ! Edge-node connectivity size to calculate   
     integer                                           :: a, b             ! Loop counters
     integer :: mpi_comm(1)
-    integer :: mpi_err
+    integer :: mpi_rank, mpi_err
     real, pointer                                 :: var_value_get_ptr(:) ! value of a variable for get_value_ptr
 
     double precision, allocatable            :: Q_bnd(:), ETA2_bnd(:) ! Boundary condition terms
@@ -84,6 +84,7 @@ program schism_driver_test
   !---------------------------------------------------------------------
     print*, "Initializing..."
     call MPI_Init(mpi_err)
+    call MPI_Comm_rank(MPI_COMM_WORLD, mpi_rank, mpi_err)
     call get_command_argument(1, arg)
     mpi_comm(1) = MPI_COMM_WORLD
     status = m%set_value('bmi_mpi_comm_handle', mpi_comm)
@@ -130,18 +131,20 @@ program schism_driver_test
         status = m%get_var_units(trim(names_inputs(j)), var_units)
         status = m%get_var_itemsize(trim(names_inputs(j)), var_itemsize)
         status = m%get_var_nbytes(trim(names_inputs(j)), var_nbytes)
-        print*, "The variable ", trim(names_inputs(j))
+        if (mpi_rank == 0) print*, "The variable ", trim(names_inputs(j))
       else
         status = m%get_var_type(trim(names_outputs(j - n_inputs)), var_type)
         status = m%get_var_units(trim(names_outputs(j - n_inputs)), var_units)
         status = m%get_var_itemsize(trim(names_outputs(j - n_inputs)), var_itemsize)
         status = m%get_var_nbytes(trim(names_outputs(j - n_inputs)), var_nbytes)
-        print*, "The variable ", trim(names_outputs(j - n_inputs))
+        if (mpi_rank == 0) print*, "The variable ", trim(names_outputs(j - n_inputs))
       end if
-      print*, "    has a type of ", var_type
-      print*, "    units of ", var_units
-      print*, "    a size of ", var_itemsize
-      print*, "    and total n bytes of ", var_nbytes
+      if (mpi_rank == 0) then
+         print*, "    has a type of ", var_type
+         print*, "    units of ", var_units
+         print*, "    a size of ", var_itemsize
+         print*, "    and total n bytes of ", var_nbytes
+      end if
     end do
 
     
