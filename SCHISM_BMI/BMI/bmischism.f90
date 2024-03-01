@@ -13,6 +13,7 @@ module bmischism
   use schism_glbl, only: xel, yel
   use schism_glbl, only: ne_global, xlon_el, ylat_el
   use schism_glbl, only: np_global, xnd, ynd, znd, area, dp
+  use schism_glbl, only: neta_global
   use schism_glbl, only: nope_global, nond_global, iond_global, nsources
   use schism_glbl, only: fluxsu, fluxlu, ieg_source, ath2, ath3
   use schism_glbl, only: windx1, windy1, pr1, airt1, shum1
@@ -492,6 +493,12 @@ end function schism_finalizer
     select case(grid)
     case(1)
        size = np_global
+       bmi_status = BMI_SUCCESS
+    case(2)
+       size = nsources
+       bmi_status = BMI_SUCCESS
+    case(3)
+       size = neta_global
        bmi_status = BMI_SUCCESS
     case default
        size = -1
