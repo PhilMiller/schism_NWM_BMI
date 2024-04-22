@@ -120,6 +120,9 @@ module bmischism
   character (len=BMI_MAX_VAR_NAME), target, &
        dimension(output_item_count) :: output_items 
 
+  integer, parameter :: SCHISM_BMI_GRID_ALL_NODES = 1
+  integer, parameter :: SCHISM_BMI_GRID_COASTAL_ELEMENTS = 2
+  integer, parameter :: SCHISM_BMI_GRID_OFFSHORE_NODES = 3
 contains
 
 subroutine assert(condition, msg)
@@ -448,13 +451,13 @@ end function schism_finalizer
 
     select case(name)
     case('ETA2','VX','VY','SFCPRS','TMP2m','UU10m','VV10m','SPFH2m','BEDLEVEL')
-       grid = 1
+       grid = SCHISM_BMI_GRID_ALL_NODES
        bmi_status = BMI_SUCCESS
     case('Q_bnd','RAINRATE')
-       grid = 2
+       grid = SCHISM_BMI_GRID_COASTAL_ELEMENTS
        bmi_status = BMI_SUCCESS
     case('ETA2_bnd')
-       grid = 3
+       grid = SCHISM_BMI_GRID_OFFSHORE_NODES
        bmi_status = BMI_SUCCESS
     case default
        grid = -1
@@ -471,10 +474,10 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
        rank = 2
        bmi_status = BMI_SUCCESS
-    case(2,3)
+    case(SCHISM_BMI_GRID_COASTAL_ELEMENTS,SCHISM_BMI_GRID_OFFSHORE_NODES)
        rank = 1
        bmi_status = BMI_SUCCESS
     case default
@@ -491,13 +494,13 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
        size = np_global
        bmi_status = BMI_SUCCESS
-    case(2)
+    case(SCHISM_BMI_GRID_COASTAL_ELEMENTS)
        size = nsources
        bmi_status = BMI_SUCCESS
-    case(3)
+    case(SCHISM_BMI_GRID_OFFSHORE_NODES)
        size = neta_global
        bmi_status = BMI_SUCCESS
     case default
@@ -578,7 +581,7 @@ end function schism_finalizer
     integer :: bmi_status, ip, i, j, ind_count, ind
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
        allocate(grid_x(npa))
        do ip=1, npa
          if (ics==2) then
@@ -591,7 +594,7 @@ end function schism_finalizer
        enddo
        x(:) = grid_x(:)
        bmi_status = BMI_SUCCESS
-    case(2)
+    case(SCHISM_BMI_GRID_COASTAL_ELEMENTS)
       ! Allocate bnd_ind array to ingest
       ! global element indices for source boundaries
       allocate(grid_x(size(ieg_source)))
@@ -607,7 +610,7 @@ end function schism_finalizer
       enddo
       x(:) = grid_x(:)
       bmi_status = BMI_SUCCESS
-    case(3)
+    case(SCHISM_BMI_GRID_OFFSHORE_NODES)
       allocate(grid_x(size(ath2(1,1,:,1,1))))
       ! Since open water level boundaries
       ! are constrained by user, we must
@@ -651,7 +654,7 @@ end function schism_finalizer
     integer :: bmi_status, ip, i, j, ind_count, ind
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
        allocate(grid_y(npa))
        do ip=1, npa
          if (ics==2) then
@@ -664,7 +667,7 @@ end function schism_finalizer
        enddo
        y(:) = grid_y(:)
        bmi_status = BMI_SUCCESS
-    case(2)
+    case(SCHISM_BMI_GRID_COASTAL_ELEMENTS)
       ! Allocate bnd_ind array to ingest
       ! global element indices for source boundaries
       allocate(grid_y(size(ieg_source)))
@@ -680,7 +683,7 @@ end function schism_finalizer
       enddo
       y(:) = grid_y(:)
       bmi_status = BMI_SUCCESS
-    case(3)
+    case(SCHISM_BMI_GRID_OFFSHORE_NODES)
       allocate(grid_y(size(ath2(1,1,:,1,1))))
       ! Since open water level boundaries
       ! are constrained by user, we must
@@ -723,7 +726,7 @@ end function schism_finalizer
     integer :: bmi_status, i, j, ind_count, ind
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
     ! cartesian coordinates have z dimension
     ! available in SCHISM, otherwise 2d model
     ! this is ignored
@@ -734,7 +737,7 @@ end function schism_finalizer
       z(:) = -1.d0
       bmi_status = BMI_FAILURE
     endif
-    case(2)
+    case(SCHISM_BMI_GRID_COASTAL_ELEMENTS)
       ! Allocate bnd_ind array to ingest
       ! global element indices for source boundaries
       allocate(grid_z(size(ieg_source)))
@@ -751,7 +754,7 @@ end function schism_finalizer
          end if
       enddo
       z(:) = grid_z(:)
-    case(3)
+    case(SCHISM_BMI_GRID_OFFSHORE_NODES)
     ! cartesian coordinates have z dimension
     ! available in SCHISM, otherwise 2d model
     ! this is ignored
@@ -793,7 +796,7 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
        count = np_global
        bmi_status = BMI_SUCCESS
     case default
@@ -810,7 +813,7 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
        count = ns_global
        bmi_status = BMI_SUCCESS
     case default
@@ -827,7 +830,7 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
        count = ne_global
        bmi_status = BMI_SUCCESS
     case default
@@ -845,7 +848,7 @@ end function schism_finalizer
     integer :: bmi_status, ie, j, jsj, counts, loop
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
       ! Initalize index variable to loop through entire array
       ! and count the edge-node connectivity indices
       counts = 0 
@@ -888,7 +891,7 @@ end function schism_finalizer
     integer :: bmi_status, i, ii, nvcount
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
       allocate(edges(sum(i34(1:nea))))
       nvcount=0
       do i=1, nea
@@ -914,7 +917,7 @@ end function schism_finalizer
     integer :: bmi_status, i, ii, nvcount
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
       allocate(nv(sum(i34(1:nea))))
       nvcount=0
       do i=1, nea
@@ -940,7 +943,7 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
        ! i34 variable indicates the shape of face, which also
        ! indicates the number of nodes each face has
        nodes_per_face(:) = i34(:)
@@ -959,10 +962,10 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(grid)
-    case(1)
+    case(SCHISM_BMI_GRID_ALL_NODES)
        type = "unstructured"
        bmi_status = BMI_SUCCESS
-    case(2,3)
+    case(SCHISM_BMI_GRID_COASTAL_ELEMENTS,SCHISM_BMI_GRID_OFFSHORE_NODES)
        type = "points"
        bmi_status = BMI_SUCCESS
     case default
