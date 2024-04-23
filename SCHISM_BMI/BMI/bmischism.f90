@@ -433,7 +433,7 @@ end function schism_finalizer
        location = "node"
        bmi_status = BMI_SUCCESS
     case('Q_bnd','RAINRATE')
-       location = "element"
+       location = "face"
        bmi_status = BMI_SUCCESS
     case default
        location = "-"
