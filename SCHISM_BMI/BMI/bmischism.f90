@@ -474,11 +474,9 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(grid)
-    case(SCHISM_BMI_GRID_ALL_NODES)
+    case(SCHISM_BMI_GRID_ALL_NODES, SCHISM_BMI_GRID_COASTAL_ELEMENTS, &
+         SCHISM_BMI_GRID_OFFSHORE_NODES,SCHISM_BMI_GRID_ALL_ELEMENTS)
        rank = 2
-       bmi_status = BMI_SUCCESS
-    case(SCHISM_BMI_GRID_COASTAL_ELEMENTS,SCHISM_BMI_GRID_OFFSHORE_NODES)
-       rank = 1
        bmi_status = BMI_SUCCESS
     case default
        rank = -1
