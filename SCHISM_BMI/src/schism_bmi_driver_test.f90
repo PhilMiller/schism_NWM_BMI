@@ -68,7 +68,7 @@ program schism_driver_test
     integer, allocatable                              :: grid_nodes_per_face(:) ! Get the number of nodes per face
     integer                                           :: counts           ! Edge-node connectivity size to calculate   
     integer                                           :: a, b             ! Loop counters
-    integer :: mpi_comm(1)
+    integer :: schism_mpi_comm(1)
     integer :: mpi_rank, mpi_err
     real, pointer                                 :: var_value_get_ptr(:) ! value of a variable for get_value_ptr
 
@@ -86,8 +86,8 @@ program schism_driver_test
     call MPI_Init(mpi_err)
     call MPI_Comm_rank(MPI_COMM_WORLD, mpi_rank, mpi_err)
     call get_command_argument(1, arg)
-    mpi_comm(1) = MPI_COMM_WORLD
-    status = m%set_value('bmi_mpi_comm_handle', mpi_comm)
+    schism_mpi_comm(1) = MPI_COMM_WORLD
+    status = m%set_value('bmi_mpi_comm_handle', schism_mpi_comm)
     status = m%initialize(arg)
 
   ! Test that all processes get here, when only a subset of processes call initialize()

@@ -123,6 +123,7 @@ module bmischism
   integer, parameter :: SCHISM_BMI_GRID_ALL_NODES = 1
   integer, parameter :: SCHISM_BMI_GRID_COASTAL_ELEMENTS = 2
   integer, parameter :: SCHISM_BMI_GRID_OFFSHORE_NODES = 3
+  integer, parameter :: SCHISM_BMI_GRID_ALL_ELEMENTS = 4
 contains
 
 subroutine assert(condition, msg)
@@ -453,7 +454,10 @@ end function schism_finalizer
     case('ETA2','VX','VY','SFCPRS','TMP2m','UU10m','VV10m','SPFH2m','BEDLEVEL')
        grid = SCHISM_BMI_GRID_ALL_NODES
        bmi_status = BMI_SUCCESS
-    case('Q_bnd','RAINRATE')
+    case('RAINRATE')
+       grid = SCHISM_BMI_GRID_ALL_ELEMENTS
+       bmi_status = BMI_SUCCESS
+    case('Q_bnd')
        grid = SCHISM_BMI_GRID_COASTAL_ELEMENTS
        bmi_status = BMI_SUCCESS
     case('ETA2_bnd')
@@ -494,6 +498,9 @@ end function schism_finalizer
     select case(grid)
     case(SCHISM_BMI_GRID_ALL_NODES)
        size = np_global
+       bmi_status = BMI_SUCCESS
+    case(SCHISM_BMI_GRID_ALL_ELEMENTS)
+       size = ne_global
        bmi_status = BMI_SUCCESS
     case(SCHISM_BMI_GRID_COASTAL_ELEMENTS)
        size = nsources
@@ -831,6 +838,9 @@ end function schism_finalizer
     case(SCHISM_BMI_GRID_ALL_NODES)
        count = ne_global
        bmi_status = BMI_SUCCESS
+    case(SCHISM_BMI_GRID_ALL_ELEMENTS)
+       count = ne_global
+       bmi_status = BMI_SUCCESS
     case default
        count = -1
        bmi_status = BMI_FAILURE
@@ -960,7 +970,7 @@ end function schism_finalizer
     integer :: bmi_status
 
     select case(grid)
-    case(SCHISM_BMI_GRID_ALL_NODES)
+    case(SCHISM_BMI_GRID_ALL_NODES,SCHISM_BMI_GRID_ALL_ELEMENTS)
        type = "unstructured"
        bmi_status = BMI_SUCCESS
     case(SCHISM_BMI_GRID_COASTAL_ELEMENTS,SCHISM_BMI_GRID_OFFSHORE_NODES)
