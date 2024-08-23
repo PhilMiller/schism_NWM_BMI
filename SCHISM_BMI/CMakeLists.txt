@@ -230,7 +230,7 @@ include_directories(${SCHISM_INCLUDE})
 #link_directories(${SCHISM_CORE})
 
 
-target_link_libraries(testbmifortranmodel PUBLIC iso_c_bmi ${SCHISM_HYDRO} ${SCHISM_CORE} ${NetCDFLIBS} parmetis)
+target_link_libraries(testbmifortranmodel PUBLIC iso_c_bmi ${SCHISM_HYDRO} ${SCHISM_CORE} ${NetCDFLIBS} parmetis ${MPI_Fortran_LIBRARIES})
 target_compile_options(testbmifortranmodel PUBLIC -cpp -DNGEN_ACTIVE)
 
 set_target_properties(testbmifortranmodel PROPERTIES VERSION ${PROJECT_VERSION})
@@ -250,6 +250,6 @@ add_executable(schism_driver src/schism_bmi_driver_test.f90)
 
 #add_dependencies(schism_driver ${NetCDFLIBS} parmetis)
 
-target_link_libraries(schism_driver PUBLIC ${NetCDFLIBS} parmetis testbmifortranmodel ${MPI_Fortran_LIBRARIES})
+target_link_libraries(schism_driver PUBLIC ${NetCDFLIBS} parmetis testbmifortranmodel)
 
 install(TARGETS schism_driver DESTINATION ${CMAKE_BINARY_DIR})
