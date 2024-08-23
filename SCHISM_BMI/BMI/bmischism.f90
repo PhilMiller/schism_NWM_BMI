@@ -996,6 +996,9 @@ end function schism_finalizer
     case('ETA2','ETA2_bnd', 'Q_bnd', 'RAINRATE','SFCPRS','SPFH2m','TMP2m','UU10m','VV10m','VX','VY','BEDLEVEL')
        size = sizeof(dummy)
        bmi_status = BMI_SUCCESS
+    case('bmi_mpi_comm_handle')
+       size = sizeof(bmi_status)
+       bmi_status = BMI_SUCCESS
     case default
        size = -1
        bmi_status = BMI_FAILURE
@@ -1010,6 +1013,12 @@ end function schism_finalizer
     integer, intent(out) :: nbytes
     integer :: bmi_status
     integer :: s1, s2, s3, grid, grid_size, item_size
+
+    if (name == 'bmi_mpi_comm_handle') then
+       nbytes = sizeof(bmi_status)
+       bmi_status = BMI_SUCCESS
+       return
+    end if
 
     s1 = this%get_var_grid(name, grid)
     s2 = this%get_grid_size(grid, grid_size)
