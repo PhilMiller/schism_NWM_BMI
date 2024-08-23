@@ -214,14 +214,20 @@ else()
     add_library(testbmifortranmodel SHARED ${BMI_SOURCES})
 endif()
 
-set(SCHISM_INCLUDE "${PROJECT_SOURCE_DIR}/SCHISM_LIB_NWM_BMI/include")
-set(SCHISM_HYDRO "${PROJECT_SOURCE_DIR}/SCHISM_LIB_NWM_BMI/lib/libhydro.a")
-set(SCHISM_CORE "${PROJECT_SOURCE_DIR}/SCHISM_LIB_NWM_BMI/lib/libcore.a")
 
+if(DEFINED SCHISM_BUILD_DIR)
+    set(SCHISM_INCLUDE "${SCHISM_BUILD_DIR}/include" CACHE STRING "")
+    set(SCHISM_HYDRO "${SCHISM_BUILD_DIR}/lib/libhydro.a" CACHE STRING "")
+    set(SCHISM_CORE "${SCHISM_BUILD_DIR}/lib/libcore.a" CACHE STRING "")
+else()
+    set(SCHISM_INCLUDE "${PROJECT_SOURCE_DIR}/SCHISM_LIB_NWM_BMI/include" CACHE STRING "")
+    set(SCHISM_HYDRO "${PROJECT_SOURCE_DIR}/SCHISM_LIB_NWM_BMI/lib/libhydro.a" CACHE STRING "")
+    set(SCHISM_CORE "${PROJECT_SOURCE_DIR}/SCHISM_LIB_NWM_BMI/lib/libcore.a" CACHE STRING "")
+endif()
 
 include_directories(${SCHISM_INCLUDE})
-link_directories(${SCHISM_HYDRO})
-link_directories(${SCHISM_CORE})
+#link_directories(${SCHISM_HYDRO})
+#link_directories(${SCHISM_CORE})
 
 
 target_link_libraries(testbmifortranmodel PUBLIC iso_c_bmi ${SCHISM_HYDRO} ${SCHISM_CORE} ${NetCDFLIBS} parmetis)
