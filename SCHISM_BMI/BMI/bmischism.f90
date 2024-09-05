@@ -1613,7 +1613,7 @@ end function schism_finalizer
       dest = [vv2(1,:)]
       bmi_status=BMI_SUCCESS
     case("BEDLEVEL")
-      dest = [dp(:)]
+      dest = [-1.0 * dp(:)] ! SCHISM represents the bed as positive m BELOW the datum
       bmi_status=BMI_SUCCESS      
     case default
        dest(:) = -1.d0
