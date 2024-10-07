@@ -10,7 +10,6 @@ module bmischism
   use schism_glbl, only: ns_global, isidenode, elside
   use schism_glbl, only: iplg, ielg, idry_e, idry, ynd, xnd
   use schism_glbl, only: ylat, xlon, npa, np, nea, ne, ics
-  use schism_glbl, only: neta_global
   use schism_glbl, only: xel, yel, nnode_et, nsources, nsinks
   use schism_glbl, only: nsources_ngen, ieg_source_ngen, ieg_sink
   use schism_glbl, only: ieg_source_flowpath_ids, ieg_sink_flowpath_ids
