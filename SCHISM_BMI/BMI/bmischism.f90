@@ -200,7 +200,7 @@ subroutine read_init_config(this, config_file, bmi_status)
       bmi_status = BMI_FAILURE
       return
   end if
- 
+
   !Update the model with all values found in the namelist
   this%model%model_start_time = model_start_time
   this%model%model_end_time = model_end_time
@@ -411,7 +411,7 @@ end function schism_finalizer
     select case(name)
     case("BEDLEVEL")
        units = "m"
-       bmi_status = BMI_SUCCESS       
+       bmi_status = BMI_SUCCESS
     case("SFCPRS_t0", "SFCPRS_t1")
        units = "Pa"
        bmi_status = BMI_SUCCESS
@@ -2012,7 +2012,7 @@ end function schism_finalizer
       bmi_status=BMI_SUCCESS
     case("BEDLEVEL")
       dest = [-1.0 * dp(:)] ! SCHISM represents the bed as positive m BELOW the datum
-      bmi_status=BMI_SUCCESS      
+      bmi_status=BMI_SUCCESS
     case default
        dest(:) = -1.d0
        bmi_status = BMI_FAILURE
